@@ -2,8 +2,14 @@
     "name": "hexlet/code",
     "autoload": {
         "psr-4": {
-            "Hexlet\\Code\\": "src/"
-        }
+            "Database\\Connection\\": "src/Database/Connection",
+            "Urls\\": "src/Urls"
+        },
+        "files": [
+            "src/Database/Connection/Connection.php",
+            "src/Urls/UrlsRepository.php",
+            "src/Urls/Validator.php"
+        ]
     },
     "authors": [
         {
@@ -20,6 +26,10 @@
         "slim/http": "^1.3",
         "slim/php-view": "^3.2",
         "php-di/php-di": "^6.4",
-        "slim/twig-view": "^3.3"
+        "slim/twig-view": "^3.3",
+        "ext-pdo": "*",
+        "slim/flash": "^0.4.0",
+        "nesbot/carbon": "^2.65",
+        "torunar/operation-result": "^1.0"
     }
 }
