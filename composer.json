@@ -31,6 +31,7 @@
         "ext-pdo": "*",
         "slim/flash": "^0.4.0",
         "nesbot/carbon": "^2.65",
-        "torunar/operation-result": "^1.0"
+        "torunar/operation-result": "^1.0",
+        "guzzlehttp/guzzle": "^7.0"
     }
 }

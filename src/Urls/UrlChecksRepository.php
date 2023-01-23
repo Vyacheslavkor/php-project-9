@@ -14,14 +14,22 @@ class UrlChecksRepository
         $this->pdo = $pdo;
     }
 
-    public function save($urlId, $result = []): bool|string
+    public function save($urlId, $params = []): bool|string
     {
         $time = Carbon::now();
-        $sql = 'INSERT INTO url_checks(url_id, created_at) VALUES(:urlId, :time)';
+
+        $default_params = [
+            'status_code' => '',
+        ];
+
+        $params = array_merge($default_params, $params);
+
+        $sql = 'INSERT INTO url_checks(url_id, created_at, status_code) VALUES(:urlId, :time, :statusCode)';
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->bindValue(':urlId', $urlId);
         $stmt->bindValue(':time', $time);
+        $stmt->bindValue(':statusCode', $params['status_code']);
 
         $stmt->execute();
 

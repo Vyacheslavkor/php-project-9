@@ -4,6 +4,7 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Database\Connection\Connection;
 use DI\Container;
+use GuzzleHttp\Client;
 use Slim\Factory\AppFactory;
 use Slim\Flash\Messages;
 use Slim\Views\Twig;
@@ -97,10 +98,22 @@ $app->post('/urls', function ($request, $response) use ($router) {
 
 $app->post('/urls/{url_id}/checks', function ($request, $response, array $args) use ($router) {
     $urlId = $args['url_id'];
-    $repository = new UrlChecksRepository($this->get('db'));
-    $repository->save($urlId);
+    $db = $this->get('db');
+    $client = new Client();
 
-    $this->get('flash')->addMessage('success', 'Страница успешно проверена');
+    try {
+        $urlsRepository = new UrlsRepository($db);
+        $urlData = $urlsRepository->getById($urlId);
+
+        $result = $client->get($urlData['name']);
+
+        $repository = new UrlChecksRepository($db);
+        $repository->save($urlId, ['status_code' => $result->getStatusCode()]);
+
+        $this->get('flash')->addMessage('success', 'Страница успешно проверена');
+    } catch (\Exception $exception) {
+        $this->get('flash')->addMessage('danger', 'Произошла ошибка при проверке, не удалось подключиться');
+    }
 
     $redirectUrl = $router->urlFor('url', ['id' => $urlId]);
 
