@@ -8,7 +8,8 @@
         "files": [
             "src/Database/Connection/Connection.php",
             "src/Urls/UrlsRepository.php",
-            "src/Urls/Validator.php"
+            "src/Urls/Validator.php",
+            "src/Urls/UrlChecksRepository.php"
         ]
     },
     "authors": [

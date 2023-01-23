@@ -50,7 +50,7 @@ class UrlsRepository
         return $this->pdo->lastInsertId();
     }
 
-    public function getAll()
+    public function getAll(): bool|array
     {
         $sql = 'SELECT * FROM urls ORDER BY id DESC';
 
