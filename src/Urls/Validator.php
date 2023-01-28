@@ -8,6 +8,11 @@ class Validator
 {
     public const URL_MAX_LENGTH = 255;
 
+    /**
+     * @param $urlData
+     *
+     * @return \Torunar\OperationResult\OperationResult
+     */
     public function validate($urlData): OperationResult
     {
         $result = new OperationResult();
@@ -19,6 +24,12 @@ class Validator
         return $result;
     }
 
+    /**
+     * @param                                          $urlData
+     * @param \Torunar\OperationResult\OperationResult $result
+     *
+     * @return void
+     */
     private function checkIsEmpty($urlData, OperationResult $result): void
     {
         if (!$result->isSuccessful() || !empty(trim($urlData['name']))) {
@@ -29,6 +40,12 @@ class Validator
         $result->setIsSuccessful(false);
     }
 
+    /**
+     * @param                                          $urlData
+     * @param \Torunar\OperationResult\OperationResult $result
+     *
+     * @return void
+     */
     private function checkStructure($urlData, OperationResult $result): void
     {
         if (!$result->isSuccessful()) {
@@ -36,7 +53,12 @@ class Validator
         }
 
         $parsedUrl = parse_url($urlData['name']);
-        if (!empty($parsedUrl) && !empty($parsedUrl['scheme']) && !empty($parsedUrl['host'])) {
+        if (
+            !empty($parsedUrl)
+            && !empty($parsedUrl['scheme'])
+            && $this->isCorrectScheme($parsedUrl['scheme'])
+            && !empty($parsedUrl['host'])
+        ) {
             $result->setData("{$parsedUrl['scheme']}://{$parsedUrl['host']}", 'url');
             return;
         }
@@ -45,6 +67,12 @@ class Validator
         $result->setIsSuccessful(false);
     }
 
+    /**
+     * @param                                          $urlData
+     * @param \Torunar\OperationResult\OperationResult $result
+     *
+     * @return void
+     */
     private function checkLength($urlData, OperationResult $result): void
     {
         if (!$result->isSuccessful() || mb_strlen($urlData['name']) <= self::URL_MAX_LENGTH) {
@@ -53,5 +81,15 @@ class Validator
 
         $result->addError('Некорректный URL');
         $result->setIsSuccessful(false);
+    }
+
+    /**
+     * @param string $scheme
+     *
+     * @return bool
+     */
+    private function isCorrectScheme(string $scheme): bool
+    {
+        return in_array($scheme, ['http', 'https']);
     }
 }
