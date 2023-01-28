@@ -20,7 +20,7 @@ session_start();
 $container = new Container();
 AppFactory::setContainer($container);
 
-$container->set('view', fn() => Twig::create(__DIR__ . '/../templates/', ['cache' => __DIR__ . '/../var/cache']));
+$container->set('view', fn() => Twig::create(__DIR__ . '/../templates/'));
 $container->set('flash', fn() => new Messages());
 
 $container->set('db', fn() => Connection::get()->connect($_ENV));
