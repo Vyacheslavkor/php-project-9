@@ -12,8 +12,8 @@ CREATE TABLE url_checks (
     id          integer PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
     url_id      integer,
     status_code smallint,
-    h1          varchar(255),
-    title       varchar(255),
+    h1          text,
+    title       text,
     description text,
     created_at  TIMESTAMP(0) NOT NULL
 );

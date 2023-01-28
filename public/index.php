@@ -4,6 +4,8 @@ require __DIR__ . '/../vendor/autoload.php';
 
 use Database\Connection\Connection;
 use DI\Container;
+use DiDom\Document;
+use Documents\Parser;
 use GuzzleHttp\Client;
 use Slim\Factory\AppFactory;
 use Slim\Flash\Messages;
@@ -105,10 +107,18 @@ $app->post('/urls/{url_id}/checks', function ($request, $response, array $args) 
         $urlsRepository = new UrlsRepository($db);
         $urlData = $urlsRepository->getById($urlId);
 
-        $result = $client->get($urlData['name']);
+        $result = $client->get($urlData['name'], ['body' => true, 'timeout' => 5]);
+
+        $params = ['status_code' => $result->getStatusCode()];
+
+        $document = new Document((string) $result->getBody());
+
+        $parser = new Parser($document);
+        $parsedParams = $parser->parse();
+        $params = array_merge($params, $parsedParams);
 
         $repository = new UrlChecksRepository($db);
-        $repository->save($urlId, ['status_code' => $result->getStatusCode()]);
+        $repository->save($urlId, $params);
 
         $this->get('flash')->addMessage('success', 'Страница успешно проверена');
     } catch (\Exception $exception) {

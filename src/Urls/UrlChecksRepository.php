@@ -20,16 +20,23 @@ class UrlChecksRepository
 
         $default_params = [
             'status_code' => '',
+            'h1'          => '',
+            'title'       => '',
+            'description' => '',
         ];
 
         $params = array_merge($default_params, $params);
 
-        $sql = 'INSERT INTO url_checks(url_id, created_at, status_code) VALUES(:urlId, :time, :statusCode)';
+        $sql = 'INSERT INTO url_checks(url_id, created_at, status_code, h1, title, description)'
+            . ' VALUES(:urlId, :time, :statusCode, :h1, :title, :description)';
         $stmt = $this->pdo->prepare($sql);
 
         $stmt->bindValue(':urlId', $urlId);
         $stmt->bindValue(':time', $time);
         $stmt->bindValue(':statusCode', $params['status_code']);
+        $stmt->bindValue(':h1', $params['h1']);
+        $stmt->bindValue(':title', $params['title']);
+        $stmt->bindValue(':description', $params['description']);
 
         $stmt->execute();
 
@@ -58,6 +65,8 @@ class UrlChecksRepository
 
         $stmt->execute();
 
-        return $stmt->fetch(PDO::FETCH_ASSOC);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        return $result === false ? [] : $result;
     }
 }
