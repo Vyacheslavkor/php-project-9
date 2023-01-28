@@ -9,11 +9,11 @@ class Validator
     public const URL_MAX_LENGTH = 255;
 
     /**
-     * @param $urlData
+     * @param array $urlData
      *
      * @return \Torunar\OperationResult\OperationResult
      */
-    public function validate($urlData): OperationResult
+    public function validate(array $urlData): OperationResult
     {
         $result = new OperationResult();
 
@@ -25,12 +25,12 @@ class Validator
     }
 
     /**
-     * @param                                          $urlData
+     * @param array                                    $urlData
      * @param \Torunar\OperationResult\OperationResult $result
      *
      * @return void
      */
-    private function checkIsEmpty($urlData, OperationResult $result): void
+    private function checkIsEmpty(array $urlData, OperationResult $result): void
     {
         if (!$result->isSuccessful() || !empty(trim($urlData['name']))) {
             return;
@@ -41,12 +41,12 @@ class Validator
     }
 
     /**
-     * @param                                          $urlData
+     * @param array                                    $urlData
      * @param \Torunar\OperationResult\OperationResult $result
      *
      * @return void
      */
-    private function checkStructure($urlData, OperationResult $result): void
+    private function checkStructure(array $urlData, OperationResult $result): void
     {
         if (!$result->isSuccessful()) {
             return;
@@ -68,12 +68,12 @@ class Validator
     }
 
     /**
-     * @param                                          $urlData
+     * @param array                                    $urlData
      * @param \Torunar\OperationResult\OperationResult $result
      *
      * @return void
      */
-    private function checkLength($urlData, OperationResult $result): void
+    private function checkLength(array $urlData, OperationResult $result): void
     {
         if (!$result->isSuccessful() || mb_strlen($urlData['name']) <= self::URL_MAX_LENGTH) {
             return;

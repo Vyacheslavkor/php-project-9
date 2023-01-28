@@ -35,6 +35,7 @@
         "nesbot/carbon": "^2.65",
         "torunar/operation-result": "^1.0",
         "guzzlehttp/guzzle": "^7.0",
-        "imangazaliev/didom": "^2.0"
+        "imangazaliev/didom": "^2.0",
+        "phpstan/phpstan": "^1.9"
     }
 }

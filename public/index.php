@@ -35,7 +35,7 @@ $app->get('/', function ($request, $response) {
     return $this->get('view')->render($response, 'index.twig');
 })->setName('index');
 
-$app->get('/urls', function ($request, $response) use ($router) {
+$app->get('/urls', function ($request, $response) {
     $repository = new UrlsRepository($this->get('db'));
     $urls = $repository->getAll();
 
@@ -47,7 +47,7 @@ $app->get('/urls', function ($request, $response) use ($router) {
     return $this->get('view')->render($response, 'urls.twig', $params);
 })->setName('urls');
 
-$app->get('/urls/{id}', function ($request, $response, array $args) use ($router) {
+$app->get('/urls/{id}', function ($request, $response, array $args) {
     $id = $args['id'];
     $urlsRepository = new UrlsRepository($this->get('db'));
 

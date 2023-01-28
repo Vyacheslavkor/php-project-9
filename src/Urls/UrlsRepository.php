@@ -7,13 +7,24 @@ use PDO;
 
 class UrlsRepository
 {
+    /**
+     * @var \PDO
+     */
     private PDO $pdo;
 
+    /**
+     * @param \PDO $pdo
+     */
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
     }
 
+    /**
+     * @param int $id
+     *
+     * @return mixed
+     */
     public function getById(int $id)
     {
         $sql = 'SELECT * FROM urls WHERE id = :id';
@@ -25,7 +36,12 @@ class UrlsRepository
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function getByName($urlName)
+    /**
+     * @param string $urlName
+     *
+     * @return mixed
+     */
+    public function getByName(string $urlName)
     {
         $sql = 'SELECT * FROM urls WHERE name = :url';
         $stmt = $this->pdo->prepare($sql);
@@ -36,7 +52,12 @@ class UrlsRepository
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function add($urlName)
+    /**
+     * @param string $urlName
+     *
+     * @return false|string
+     */
+    public function add(string $urlName)
     {
         $time = Carbon::now();
         $sql = 'INSERT INTO urls(name, created_at) VALUES(:url, :time)';
@@ -50,10 +71,15 @@ class UrlsRepository
         return $this->pdo->lastInsertId();
     }
 
-    public function getAll(): bool|array
+    /**
+     * @return array
+     */
+    public function getAll(): array
     {
         $sql = 'SELECT * FROM urls ORDER BY id DESC';
+        $result = $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
 
-        return $this->pdo->query($sql)->fetchAll(PDO::FETCH_ASSOC);
+        return $result
+            ?: [];
     }
 }

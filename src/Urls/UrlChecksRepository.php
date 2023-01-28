@@ -7,14 +7,26 @@ use PDO;
 
 class UrlChecksRepository
 {
+    /**
+     * @var \PDO
+     */
     private PDO $pdo;
 
+    /**
+     * @param \PDO $pdo
+     */
     public function __construct(PDO $pdo)
     {
         $this->pdo = $pdo;
     }
 
-    public function save($urlId, $params = []): bool|string
+    /**
+     * @param int   $urlId
+     * @param array $params
+     *
+     * @return bool|string
+     */
+    public function save(int $urlId, array $params = []): bool|string
     {
         $time = Carbon::now();
 
@@ -43,6 +55,11 @@ class UrlChecksRepository
         return $this->pdo->lastInsertId();
     }
 
+    /**
+     * @param int $urlId
+     *
+     * @return bool|array
+     */
     public function getAllByUrlId(int $urlId): bool|array
     {
         $sql = 'SELECT * FROM url_checks WHERE url_id = :urlId ORDER BY id DESC';
@@ -55,7 +72,12 @@ class UrlChecksRepository
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function getLastCheck(int $urlId)
+    /**
+     * @param int $urlId
+     *
+     * @return array
+     */
+    public function getLastCheck(int $urlId): array
     {
         $sql = 'SELECT created_at AS last_check_at, status_code AS last_check_status_code FROM url_checks'
             . ' WHERE url_id = :urlId ORDER BY id DESC LIMIT 1';

@@ -38,13 +38,14 @@ class Parser
      */
     private function getH1(): string
     {
-        [$h1] = $this->document->find('h1');
-
-        if (!$h1) {
+        $elms = $this->document->find('h1');
+        if (empty($elms)) {
             return '';
         }
 
-        return strip_tags($h1->innerHtml());
+        [$h1] = $elms;
+
+        return method_exists($h1, 'innerHtml') ? strip_tags($h1->innerHtml()) : '';
     }
 
     /**
@@ -53,13 +54,14 @@ class Parser
      */
     private function getTitle(): string
     {
-        [$title] = $this->document->find('title');
-
-        if (!$title) {
+        $elms = $this->document->find('title');
+        if (empty($elms)) {
             return '';
         }
 
-        return strip_tags($title->innerHtml());
+        [$title] = $elms;
+
+        return method_exists($title, 'innerHtml') ? strip_tags($title->innerHtml()) : '';
     }
 
     /**
@@ -68,12 +70,13 @@ class Parser
      */
     private function getMetaContent(): string
     {
-        [$meta] = $this->document->find('meta[name=description]');
+        $elms = $this->document->find('meta[name=description]');
 
-        if (!$meta) {
+        if (empty($elms)) {
             return '';
         }
 
+        [$meta] = $elms;
         $content = $meta->getAttribute('content');
 
         return $content ?: '';

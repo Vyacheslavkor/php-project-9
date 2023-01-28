@@ -4,9 +4,18 @@ namespace Database\Connection;
 
 class Connection
 {
-    private static $connection;
+    /**
+     * @var \Database\Connection\Connection|null
+     */
+    private static ?Connection $connection = null;
 
-    public function connect($env): \PDO
+    /**
+     * @param array $env
+     *
+     * @return \PDO
+     * @throws \Exception
+     */
+    public function connect(array $env): \PDO
     {
         if (empty($env['DATABASE_URL'])) {
             throw new \Exception("Database params is empty.");
@@ -28,13 +37,16 @@ class Connection
         return $pdo;
     }
 
+    /**
+     * @return static
+     */
     public static function get(): self
     {
-        if (null === static::$connection) {
-            static::$connection = new static();
+        if (self::$connection === null) {
+            self::$connection = new self();
         }
 
-        return static::$connection;
+        return self::$connection;
     }
 
     protected function __construct()
